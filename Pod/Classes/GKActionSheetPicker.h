@@ -1,6 +1,6 @@
 //
 //  GKActionSheetPicker.h
-//  
+//
 //
 //  Created by GK on 15.09.10..
 //
@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerDismissType) {
 - (NSInteger)actionSheetPicker:(GKActionSheetPicker *)picker numberOfRowsInComponent:(NSInteger)component;
 - (NSInteger)numberOfComponentsInActionSheetPicker:(GKActionSheetPicker *)picker;
 - (NSString *)actionSheetPicker:(GKActionSheetPicker *)picker titleForRow:(NSInteger)row forComponent:(NSInteger)component;
+- (void)actionSheetPicker:(GKActionSheetPicker *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
 
 @end
 

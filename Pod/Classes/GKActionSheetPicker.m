@@ -1,6 +1,6 @@
 //
 //  GKActionSheetPicker.m
-//  
+//
 //
 //  Created by GK on 15.09.10..
 //
@@ -275,7 +275,7 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
         _datePicker.tintColor = self.tintColor;
         if (@available(iOS 13.4, *)) {
             _datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
-        } 
+        }
     }
     
     return _datePicker;
@@ -467,7 +467,8 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
     
     // Add picker
     if (self.pickerType == GKActionSheetPickerTypeString ||
-        self.pickerType == GKActionSheetPickerTypeMultiColumnString) {
+        self.pickerType == GKActionSheetPickerTypeMultiColumnString ||
+        self.pickerType == GKActionSheetPickerTypeCustom) {
         
         self.pickerView.frame = CGRectMake(0, ToolbarHeight, hostFrame.size.width, PickerViewHeight);
         self.pickerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -725,6 +726,10 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
         if ([self.delegate respondsToSelector:@selector(actionSheetPicker:didChangeValue:)]) {
             [self.delegate actionSheetPicker:self didChangeValue:self.selections];
         }
+        
+        if ([self.delegate respondsToSelector:@selector(actionSheetPicker:didSelectRow:inComponent:)]) {
+            [self.delegate actionSheetPicker:self didSelectRow:row inComponent:component];
+        }
     }
 }
 
@@ -753,7 +758,8 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
         
        self.selectCallback(self.selection);
         
-    } else if (self.pickerType == GKActionSheetPickerTypeMultiColumnString) {
+    } else if (self.pickerType == GKActionSheetPickerTypeMultiColumnString ||
+               self.pickerType == GKActionSheetPickerTypeCustom) {
         
         if ([self.delegate respondsToSelector:@selector(actionSheetPicker:didSelectValue:)]) {
             [self.delegate actionSheetPicker:self didSelectValue:self.selections];
