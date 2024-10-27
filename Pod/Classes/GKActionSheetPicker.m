@@ -17,7 +17,8 @@
 typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
     GKActionSheetPickerTypeString,
     GKActionSheetPickerTypeMultiColumnString,
-    GKActionSheetPickerTypeDate
+    GKActionSheetPickerTypeDate,
+    GKActionSheetPickerTypeCustom
 };
 
 @interface GKActionSheetPicker () <UIPickerViewDataSource, UIPickerViewDelegate, UIToolbarDelegate>
@@ -634,6 +635,8 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
     } else if (self.pickerType == GKActionSheetPickerTypeMultiColumnString) {
         
         return self.components.count;
+    } else if (self.pickerType == GKActionSheetPickerTypeCustom && [self.delegate respondsToSelector:@selector(numberOfComponentsInActionSheetPicker:)]) {
+        return [self.delegate numberOfComponentsInActionSheetPicker:self];;
     }
     
     return 0;
@@ -649,6 +652,8 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
         
         NSArray *componentArray = [self.components objectAtIndex:component];
         return componentArray.count;
+    } else if (self.pickerType == GKActionSheetPickerTypeCustom && [self.delegate respondsToSelector:@selector(actionSheetPicker:numberOfRowsInComponent:)]) {
+        return [self.delegate actionSheetPicker:self numberOfRowsInComponent:component];
     }
     
     return 0;
@@ -666,6 +671,9 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
         NSArray *componentArray = [self.components objectAtIndex:component];
         GKActionSheetPickerItem *item = [componentArray objectAtIndex:row];
         return item.title;
+    } else if (self.pickerType == GKActionSheetPickerTypeCustom &&
+               [self.delegate respondsToSelector:@selector(actionSheetPicker:titleForRow:forComponent:)]) {
+        return [self.delegate actionSheetPicker:self titleForRow:row forComponent:component];
     }
     
     return nil;
@@ -705,7 +713,8 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
             [self.delegate actionSheetPicker:self didChangeValue:self.selection];
         }
         
-    } else if (self.pickerType == GKActionSheetPickerTypeMultiColumnString) {
+    } else if (self.pickerType == GKActionSheetPickerTypeMultiColumnString
+               || self.pickerType == GKActionSheetPickerTypeCustom) {
         
         if ([self.delegate respondsToSelector:@selector(actionSheetPicker:didChangeValue:)]) {
             [self.delegate actionSheetPicker:self didChangeValue:self.selections];
@@ -805,6 +814,15 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
     
         self.selectedDate = self.datePicker.date;
         
+    } else if (self.pickerType == GKActionSheetPickerTypeCustom) {
+        NSMutableArray *selections = [NSMutableArray new];
+        for (NSUInteger i=0; i<self.pickerView.numberOfComponents; i++) {
+            NSUInteger index = [self.pickerView selectedRowInComponent:i];
+            NSString *value = [self.delegate actionSheetPicker:self titleForRow:index forComponent:i];
+            [selections addObject:value];
+        }
+        
+        self.selections = selections;
     }
 }
 

@@ -47,6 +47,10 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerDismissType) {
  */
 - (void)actionSheetPickerDidCancel:(GKActionSheetPicker *)picker;
 
+- (NSInteger)actionSheetPicker:(GKActionSheetPicker *)picker numberOfRowsInComponent:(NSInteger)component;
+- (NSInteger)numberOfComponentsInActionSheetPicker:(GKActionSheetPicker *)picker;
+- (NSString *)actionSheetPicker:(GKActionSheetPicker *)picker titleForRow:(NSInteger)row forComponent:(NSInteger)component;
+
 @end
 
 
