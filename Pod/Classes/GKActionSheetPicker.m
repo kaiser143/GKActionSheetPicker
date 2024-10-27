@@ -208,6 +208,12 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerType) {
     return [GKActionSheetPicker countryPickerWithCallback:nil cancelCallback:nil];
 }
 
++ (instancetype)customPicker {
+    GKActionSheetPicker *picker = [GKActionSheetPicker new];
+    picker.pickerType = GKActionSheetPickerTypeCustom;
+    return picker;
+}
+
 #pragma mark - Accessors
 
 - (UIColor *)overlayLayerColor

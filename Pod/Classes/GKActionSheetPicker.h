@@ -203,6 +203,8 @@ typedef NS_ENUM(NSUInteger, GKActionSheetPickerDismissType) {
  */
 + (instancetype)countryPicker;
 
++ (instancetype)customPicker;
+
 #pragma mark - Selecting values
 
 /**
